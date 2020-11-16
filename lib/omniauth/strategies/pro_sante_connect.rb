@@ -23,6 +23,10 @@ module OmniAuth
         super.merge(required_options)
       end
 
+      def callback_url
+        full_host + script_name + callback_path # Do not include query string
+      end
+
       def required_options
         {
           scope: 'openid scope_all',
