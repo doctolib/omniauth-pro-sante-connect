@@ -10,9 +10,9 @@ module OmniAuth
       option :authorize_options, [:scope, :acr_values, :response_type]
 
       option :client_options, {
-        site: 'https://auth.bas.esw.esante.gouv.fr',
+        site: 'https://auth.esw.esante.gouv.fr',
         token_url: '/auth/realms/esante-wallet/protocol/openid-connect/token',
-        authorize_url: 'https://wallet.bas.esw.esante.gouv.fr/auth',
+        authorize_url: 'https://wallet.esw.esante.gouv.fr/auth',
       }
 
       info do
