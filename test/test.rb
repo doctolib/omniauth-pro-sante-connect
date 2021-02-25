@@ -7,15 +7,15 @@ end
 
 class ClientTest < StrategyTestCase
   test "has correct pro santé connect site" do
-    assert_equal "https://auth.bas.esw.esante.gouv.fr", strategy.client.site
+    assert_equal "https://auth.esw.esante.gouv.fr", strategy.client.site
   end
 
   test "has correct authorize url" do
-    assert_equal "/oauth/authorize", strategy.client.options[:authorize_url]
+    assert_equal "https://wallet.esw.esante.gouv.fr/auth", strategy.client.options[:authorize_url]
   end
 
   test "has correct token url" do
-    assert_equal "/api/oauth.access", strategy.client.options[:token_url]
+    assert_equal "/auth/realms/esante-wallet/protocol/openid-connect/token", strategy.client.options[:token_url]
   end
 end
 
