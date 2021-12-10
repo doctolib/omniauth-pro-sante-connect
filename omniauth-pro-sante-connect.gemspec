@@ -5,7 +5,6 @@ Gem::Specification.new do |spec|
   spec.name          = "omniauth-pro-sante-connect"
   spec.version       = Omniauth::ProSanteConnect::VERSION
   spec.authors       = ["Julien Meichelbeck"]
-  spec.email         = ["julien.meichelbeck@doctolib.com"]
   spec.description   = %q{OmniAuth strategy for PRO Santé Connect}
   spec.summary       = %q{OmniAuth strategy for PRO Santé Connect}
   spec.homepage      = "https://github.com/doctolib/omniauth-pro-sante-connect.git"
