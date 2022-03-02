@@ -27,6 +27,11 @@ module OAuth2StrategyTests
       assert_equal "zip", strategy.authorize_params["baz"]
     end
 
+    test "should include nonce if provided in request param" do
+      @request.params['nonce'] = '123abc'
+      assert_equal '123abc', strategy.authorize_params['nonce']
+    end
+
     test "should include top-level options that are marked as :authorize_options" do
       @options = { :authorize_options => [:scope, :foo], :scope => "bar", :foo => "baz" }
       assert_equal "bar", strategy.authorize_params["scope"]

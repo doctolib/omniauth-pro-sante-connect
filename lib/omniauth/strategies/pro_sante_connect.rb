@@ -20,7 +20,9 @@ module OmniAuth
       end
 
       def authorize_params
-        super.merge(required_options)
+        super
+          .merge({nonce: request.params['nonce']}).compact
+          .merge(required_options)
       end
 
       def callback_url
