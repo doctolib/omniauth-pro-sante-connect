@@ -33,8 +33,8 @@ module OAuth2StrategyTests
     end
 
     test "should include top-level options that are marked as :authorize_options" do
-      @options = { :authorize_options => [:scope, :foo], :scope => "bar", :foo => "baz" }
-      assert_equal "bar", strategy.authorize_params["scope"]
+      @options = { :authorize_options => [:ham, :foo], :ham => "cheese", :foo => "baz" }
+      assert_equal "cheese", strategy.authorize_params["ham"]
       assert_equal "baz", strategy.authorize_params["foo"]
     end
 
@@ -69,6 +69,25 @@ module OAuth2StrategyTests
       refute_equal "foo", strategy.authorize_params[:state]
       refute_empty strategy.session["omniauth.state"]
       refute_equal "foo", strategy.session["omniauth.state"]
+    end
+  end
+
+  module NonceAuthorizeParamsTests
+    extend BlockTestHelper
+
+    test "should store random nonce in the session when none is present in authorize or request params" do
+      assert_includes strategy.authorize_params.keys, "nonce"
+      refute_empty strategy.authorize_params["nonce"]
+      refute_empty strategy.session["omniauth.nonce"]
+      assert_equal strategy.authorize_params["nonce"], strategy.session["omniauth.nonce"]
+    end
+
+    test "should store state in the session when present in request params" do
+      @request.stubs(:params).returns({ "nonce" => "generatedbyme" })
+      refute_empty strategy.authorize_params["nonce"]
+      assert_equal "generatedbyme", strategy.authorize_params[:nonce]
+      refute_empty strategy.session["omniauth.nonce"]
+      assert_equal "generatedbyme", strategy.session["omniauth.nonce"]
     end
   end
 
