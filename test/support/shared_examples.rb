@@ -5,6 +5,7 @@ module OAuth2StrategyTests
       include ClientTests
       include AuthorizeParamsTests
       include CSRFAuthorizeParamsTests
+      include NonceAuthorizeParamsTests
       include TokenParamsTests
     end
   end
@@ -25,11 +26,6 @@ module OAuth2StrategyTests
       @options = { :authorize_params => { :foo => "bar", :baz => "zip" } }
       assert_equal "bar", strategy.authorize_params["foo"]
       assert_equal "zip", strategy.authorize_params["baz"]
-    end
-
-    test "should include nonce if provided in request param" do
-      @request.params['nonce'] = '123abc'
-      assert_equal '123abc', strategy.authorize_params['nonce']
     end
 
     test "should include top-level options that are marked as :authorize_options" do
@@ -82,12 +78,19 @@ module OAuth2StrategyTests
       assert_equal strategy.authorize_params["nonce"], strategy.session["omniauth.nonce"]
     end
 
-    test "should store state in the session when present in request params" do
+    test "should store nonce in the session when present in request params" do
       @request.stubs(:params).returns({ "nonce" => "generatedbyme" })
       refute_empty strategy.authorize_params["nonce"]
       assert_equal "generatedbyme", strategy.authorize_params[:nonce]
       refute_empty strategy.session["omniauth.nonce"]
       assert_equal "generatedbyme", strategy.session["omniauth.nonce"]
+    end
+
+    test "should ignore nonce if send_nonce option is false" do
+      @options = { send_nonce: false }
+      @request.stubs(:params).returns({ "nonce" => "generatedbyme" })
+      assert_nil strategy.authorize_params["nonce"]
+      assert_nil strategy.session["omniauth.nonce"]
     end
   end
 

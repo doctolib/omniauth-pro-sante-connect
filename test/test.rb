@@ -123,3 +123,35 @@ class SkipInfoTest < StrategyTestCase
   end
 
 end
+
+class NonceCheckTest < StrategyTestCase
+  def setup
+    super
+    url_base = 'http://auth.request.com'
+    @request.stubs(:url).returns("#{url_base}/some/page")
+    @options = { provider_ignores_state: true }
+  end
+
+  test 'nonce is verified at callback' do
+    @request.stubs(:params).returns({ 'nonce' => 'generated_by_me' })
+    OmniAuth::Strategies::OAuth2.any_instance.stubs(:callback_phase).returns(true)
+    strategy.expects(:fail!).never
+    strategy.authorize_params
+    strategy.callback_phase
+  end
+
+  test 'fails if nonce does not match' do
+    OmniAuth::Strategies::OAuth2.any_instance.stubs(:callback_phase).returns(true)
+    strategy
+      .expects(:fail!)
+      .with(
+        :invalid_nonce,
+        OmniAuth::Strategies::OAuth2::CallbackError.new(
+          :invalid_nonce,
+          'Nonce found in id token is invalid'))
+      .once
+    strategy.authorize_params
+    @request.stubs(:params).returns({ 'nonce' => 'generated_by_me' })
+    strategy.callback_phase
+  end
+end
