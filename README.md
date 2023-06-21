@@ -11,7 +11,7 @@ You should have already installed OmniAuth into your app; if not, read the [Omni
 First start by adding this gem to your Gemfile:
 
 ```ruby
-gem 'omniauth-pro-sante-connect'
+gem 'omniauth-pro-sante-connect', github: 'doctolib/omniauth-pro-sante-connect'
 ```
 
 Next, tell OmniAuth about this provider. For a Rails app, your `config/initializers/omniauth.rb` file should look like this:
